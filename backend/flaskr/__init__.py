@@ -61,10 +61,16 @@ def create_app(test_config=None):
     questions = Question.query.order_by('id').all()
     formatted_questions = [question.format() for question in questions]
 
+    categories = Category.query.order_by('id').all()
+    formatted_categories = [category.format() for category in categories]
+
     return jsonify({
       'success': True,
       'status_code': 200,
-      'questions': formatted_questions[start:end]
+      'questions': formatted_questions[start:end],
+      'total_questions': len(formatted_questions),
+      'categories': [],
+      'currentCategory': 2
     })
   '''
   @TODO: 
