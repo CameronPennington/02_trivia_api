@@ -24,7 +24,7 @@ class TriviaTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-
+        #rewrite following models.py
         self.new_question = {
             'text': 'Test Question',
             'answer': 'Test Answer',
