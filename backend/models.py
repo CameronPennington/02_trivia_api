@@ -49,14 +49,21 @@ class Question(db.Model):
     db.session.delete(self)
     db.session.commit()
 
+  @property
+  def category_name(self):
+    category_name = Category.query.get(self.category).type
+    return category_name
+
   def format(self):
     return {
       'id': self.id,
       'question': self.question,
       'answer': self.answer,
       'category': self.category,
-      'difficulty': self.difficulty
+      'difficulty': self.difficulty,
+      'category_name': self.category_name
     }
+
 
 '''
 Category

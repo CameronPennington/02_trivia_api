@@ -60,12 +60,12 @@ def create_app(test_config=None):
     end = start + 10
     questions = Question.query.order_by('id').all()
     formatted_questions = [question.format() for question in questions]
-
+    print(formatted_questions)
     categories = Category.query.order_by('id').all()
     formatted_categories = [category.format() for category in categories]
 
     category_items = [(category.type) for category in categories]
-
+    #categories has to return as an object
     return jsonify({
       'success': True,
       'status_code': 200,
