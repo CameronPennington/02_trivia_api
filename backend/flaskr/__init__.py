@@ -11,7 +11,8 @@ QUESTIONS_PER_PAGE = 10
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
-  db = SQLAlchemy(setup_db(app))
+  setup_db(app)
+  db = SQLAlchemy()
   
   '''
   @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
@@ -82,7 +83,10 @@ def create_app(test_config=None):
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def delete_question(question_id):
     try:
-      Question.query.filter_by(id=question_id).delete()
+      
+      question = Question.query.filter(Question.id == question_id).one_or_none()
+      question.delete()
+
       db.session.commit()
     except:
       print('delete failed')
