@@ -26,11 +26,7 @@ def create_app(test_config=None):
     response.headers.add('Add-Control-Allow-Headers', 'Content-Type, Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
     return response
-  '''
-  @TODO: 
-  Create an endpoint to handle GET requests 
-  for all available categories.
-  '''
+
   @app.route('/categories', methods=['GET'])
   def get_categories():
     categories = Category.query.order_by('id').all()
@@ -42,18 +38,6 @@ def create_app(test_config=None):
       'status_code': 200
     })
 
-  '''
-  @TODO: 
-  Create an endpoint to handle GET requests for questions, 
-  including pagination (every 10 questions). 
-  This endpoint should return a list of questions, 
-  number of total questions, current category, categories. 
-
-  TEST: At this point, when you start the application
-  you should see questions and categories generated,
-  ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
-  '''
   @app.route('/questions', methods=['GET'])
   def get_questions():
     page = request.args.get('page', 1, type=int)
@@ -73,13 +57,7 @@ def create_app(test_config=None):
       'total_questions': len(formatted_questions),
       'categories': category_items
     })
-  '''
-  @TODO: 
-  Create an endpoint to DELETE question using a question ID. 
 
-  TEST: When you click the trash icon next to a question, the question will be removed.
-  This removal will persist in the database and when you refresh the page. 
-  '''
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def delete_question(question_id):
     try:
@@ -93,10 +71,19 @@ def create_app(test_config=None):
       db.session.rollback()
     finally:
       db.session.close()
-    #
+      page = request.args.get('page', 1, type=int)
+      start = (page - 1) * 10
+      end = start + 10
+      questions = Question.query.order_by('id').all()
+      formatted_questions = [question.format() for question in questions]
+      categories = Category.query.order_by('id').all()
+      category_items = [(category.type) for category in categories]
     return jsonify({
       'success': True,
-      'status_code': 200
+      'status_code': 200,
+      'deleted': question_id,
+      'total_questions': len(formatted_questions),
+      'questions': formatted_questions[start:end]
     })
   '''
   @TODO: 
@@ -112,8 +99,7 @@ def create_app(test_config=None):
   def create_new_question():
     try:
       #request.get_json()
-      question = Question.query.filter(Question.id == question_id).one_or_none()
-      question.delete()
+
 
       db.session.commit()
     except:
