@@ -89,7 +89,7 @@ def create_app(test_config=None):
 
       db.session.commit()
     except:
-      print('delete failed')
+ 
       db.session.rollback()
     finally:
       db.session.close()
@@ -108,7 +108,24 @@ def create_app(test_config=None):
   the form will clear and the question will appear at the end of the last page
   of the questions list in the "List" tab.  
   '''
+  @app.route('/questions', methods=['POST'])
+  def create_new_question():
+    try:
+      #request.get_json()
+      question = Question.query.filter(Question.id == question_id).one_or_none()
+      question.delete()
 
+      db.session.commit()
+    except:
+ 
+      db.session.rollback()
+    finally:
+      db.session.close()
+    #
+    return jsonify({
+      'success': True,
+      'status_code': 200
+    })
   '''
   @TODO: 
   Create a POST endpoint to get questions based on a search term. 

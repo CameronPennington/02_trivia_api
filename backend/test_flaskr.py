@@ -26,10 +26,11 @@ class TriviaTestCase(unittest.TestCase):
             self.db.create_all()
         #rewrite following models.py
         self.new_question = {
-            'text': 'Test Question',
+            'question': 'Test Question',
             'answer': 'Test Answer',
             'difficulty': 1,
-            'category': 1
+            'category': 1,
+            'category_name': 'Test Category Name'
         }
     
     def tearDown(self):
@@ -46,7 +47,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['categories']))
+        self.assertTrue(data['categories'])
 
     def test_get_questions(self):
         res = self.client().get('/questions')
@@ -54,7 +55,15 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['questions']))
+        self.assertTrue(data['questions'])
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(data['categories'])
+
+    def test_create_question(self):
+        res = self.client().post('/questions')
+        data = json.loads(res.data)
+
+        
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
