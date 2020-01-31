@@ -98,8 +98,13 @@ def create_app(test_config=None):
   @app.route('/questions', methods=['POST'])
   def create_new_question():
     try:
-      #request.get_json()
-
+      new_question = Question(
+        question = request.get_json('question'),
+        answer = request.get_json('answer'),
+        category = request.get_json('category'),
+        difficulty = reuqest.get_json('difficulty')
+      )
+      db.session.add(new_question)
 
       db.session.commit()
     except:
@@ -107,7 +112,13 @@ def create_app(test_config=None):
       db.session.rollback()
     finally:
       db.session.close()
-    #
+      page = request.args.get('page', 1, type=int)
+      start = (page - 1) * 10
+      end = start + 10
+      questions = Question.query.order_by('id').all()
+      formatted_questions = [question.format() for question in questions]
+      categories = Category.query.order_by('id').all()
+      category_items = [(category.type) for category in categories]
     return jsonify({
       'success': True,
       'status_code': 200

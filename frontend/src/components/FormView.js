@@ -20,6 +20,7 @@ class FormView extends Component {
       url: `/categories`, //TODO: update request URL
       type: "GET",
       success: (result) => {
+        console.log(result)
         this.setState({ categories: result.categories })
         return;
       },
@@ -49,6 +50,7 @@ class FormView extends Component {
       },
       crossDomain: true,
       success: (result) => {
+        
         document.getElementById("add-question-form").reset();
         return;
       },
@@ -89,9 +91,9 @@ class FormView extends Component {
           <label>
             Category
             <select name="category" onChange={this.handleChange}>
-              {Object.keys(this.state.categories).map(id => {
+              {Object.keys(this.state.categories).map(i => {
                   return (
-                    <option key={id} value={id}>{this.state.categories[id]}</option>
+                    <option key={i} value={i}>{this.state.categories[i].type}</option>
                   )
                 })}
             </select>
