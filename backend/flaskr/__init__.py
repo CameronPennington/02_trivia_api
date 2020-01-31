@@ -73,7 +73,7 @@ def create_app(test_config=None):
       db.session.commit()
     except:
       db.session.rollback()
-      abort(405)
+      abort(422)
     finally:
       db.session.close()
       page = request.args.get('page', 1, type=int)
@@ -106,8 +106,8 @@ def create_app(test_config=None):
   
       db.session.commit()
     except:
- 
       db.session.rollback()
+      abort(422)
     finally:
       db.session.close()
 
