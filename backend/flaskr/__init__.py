@@ -30,7 +30,7 @@ def create_app(test_config=None):
 
       if len(categories) == 0:
         abort(404)
-        
+
       return jsonify({
         'success': True,
         'categories': formatted_categories,
@@ -41,23 +41,25 @@ def create_app(test_config=None):
 
   @app.route('/questions', methods=['GET'])
   def get_questions():
-    page = request.args.get('page', 1, type=int)
-    start = (page - 1) * 10
-    end = start + 10
-    questions = Question.query.order_by('id').all()
-    formatted_questions = [question.format() for question in questions]
-    categories = Category.query.order_by('id').all()
-    formatted_categories = [category.format() for category in categories]
-
-    category_items = [(category.type) for category in categories]
-    #categories has to return as an object
-    return jsonify({
-      'success': True,
-      'status_code': 200,
-      'questions': formatted_questions[start:end],
-      'total_questions': len(formatted_questions),
-      'categories': category_items
-    })
+    try:
+      page = request.args.get('page', 1, type=int)
+      start = (page - 1) * 10
+      end = start + 10
+      questions = Question.query.order_by('id').all()
+      formatted_questions = [question.format() for question in questions]
+      categories = Category.query.order_by('id').all()
+      category_items = [(category.type) for category in categories]
+      if len(questions) == 0 or len(categories) == 0:
+        abort(404)
+      return jsonify({
+        'success': True,
+        'status_code': 200,
+        'questions': formatted_questions[start:end],
+        'total_questions': len(formatted_questions),
+        'categories': category_items
+      })
+    except:
+      abort(422)
 
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def delete_question(question_id):
