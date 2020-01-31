@@ -98,14 +98,16 @@ def create_app(test_config=None):
   @app.route('/questions', methods=['POST'])
   def create_new_question():
     try:
+      req_data = request.get_json()
+   
       new_question = Question(
-        question = request.get_json('question'),
-        answer = request.get_json('answer'),
-        category = request.get_json('category'),
-        difficulty = reuqest.get_json('difficulty')
+        question = req_data['question'],
+        answer = req_data['answer'],
+        category = req_data['category'],
+        difficulty = req_data['difficulty']
       )
       db.session.add(new_question)
-
+  
       db.session.commit()
     except:
  
