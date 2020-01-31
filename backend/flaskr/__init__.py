@@ -14,7 +14,6 @@ def create_app(test_config=None):
   setup_db(app)
   db = SQLAlchemy()
   
-
   CORS(app)
 
   @app.after_request
@@ -28,7 +27,10 @@ def create_app(test_config=None):
     try:
       categories = Category.query.order_by('id').all()
       formatted_categories = [category.format() for category in categories]
-      
+
+      if len(categories) == 0:
+        abort(404)
+        
       return jsonify({
         'success': True,
         'categories': formatted_categories,
