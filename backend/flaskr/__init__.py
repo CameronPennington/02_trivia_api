@@ -162,15 +162,27 @@ def create_app(test_config=None):
   '''
   @app.errorhandler(404)
   def not_found(e):
-    return None
+    return jsonify({
+      'success': False,
+      'error': 404,
+      'message': 'Not found'
+    }), 404
 
   @app.errorhandler(405)
   def not_allowed(e):
-    return None
+    return jsonify({
+      'success': False,
+      'error': 405,
+      'message': 'Not allowed'
+    }), 405
 
   @app.errorhandler(422)
   def not_processable(e):
-    return None
+    return jsonify({
+      'success': False,
+      'error': 422,
+      'message': 'Not processable'
+    }), 422
   
   return app
 
