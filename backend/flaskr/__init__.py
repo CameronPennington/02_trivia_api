@@ -66,12 +66,14 @@ def create_app(test_config=None):
     try:
       
       question = Question.query.filter(Question.id == question_id).one_or_none()
+      if question is None:
+        abort(404)
       question.delete()
 
       db.session.commit()
     except:
- 
       db.session.rollback()
+      abort(405)
     finally:
       db.session.close()
       page = request.args.get('page', 1, type=int)
