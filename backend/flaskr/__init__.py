@@ -29,14 +29,17 @@ def create_app(test_config=None):
 
   @app.route('/categories', methods=['GET'])
   def get_categories():
-    categories = Category.query.order_by('id').all()
-    formatted_categories = [category.format() for category in categories]
-    
-    return jsonify({
-      'success': True,
-      'categories': formatted_categories,
-      'status_code': 200
-    })
+    try:
+      categories = Category.query.order_by('id').all()
+      formatted_categories = [category.format() for category in categories]
+      
+      return jsonify({
+        'success': True,
+        'categories': formatted_categories,
+        'status_code': 200
+      })
+    except:
+      abort(422)
 
   @app.route('/questions', methods=['GET'])
   def get_questions():
@@ -157,6 +160,17 @@ def create_app(test_config=None):
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
+  @app.errorhandler(404)
+  def not_found(e):
+    return None
+
+  @app.errorhandler(405)
+  def not_allowed(e):
+    return None
+
+  @app.errorhandler(422)
+  def not_processable(e):
+    return None
   
   return app
 
