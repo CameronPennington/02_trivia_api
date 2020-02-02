@@ -24,7 +24,11 @@ class TriviaTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-        #rewrite following models.py
+        
+        self.search_term = {
+            'search_term': 'what'
+        }
+
         self.new_question = {
             'question': 'Test Question',
             'answer': 'Test Answer',
@@ -32,7 +36,7 @@ class TriviaTestCase(unittest.TestCase):
             'category': 1,
             'category_name': 'Test Category Name'
         }
-    
+
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -70,6 +74,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['deleted'], 1)
         self.assertTrue(data['total_questions'])
         self.assertTrue(len(data['questions']))
+
+    def test_search_questions(self):
+        res = self.client().post('/questions/search', json=self.search_term)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
 
     def test_create_question(self):
         res = self.client().post('/questions', json=self.new_question)
