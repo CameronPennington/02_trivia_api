@@ -129,16 +129,27 @@ def create_app(test_config=None):
   def search_questions():
     try:
       req_data = request.get_json()
-      questions = Question.query.filter(func.lower(Question.question).contains(req_data['search_term'].lower())).all()
+      
+      questions = Question.query.filter(func.lower(Question.question).contains(req_data['searchTerm'].lower())).all()
+    
       if len(questions) == 0:
         abort(404)
+      formatted_questions = [question.format() for question in questions]
+      page = 1
+      start = (page - 1) * 10
+      end = start + 10
+      categories = Category.query.order_by('id').all()
+      category_items = [(category.type) for category in categories]
+
     except:
       abort(422)
 
     return jsonify({
       'success': True,
       'status_code': 200,
-      'search results': questions
+      'questions': formatted_questions[start:end],
+      'total_questions': len(formatted_questions),
+      'categories': category_items
     })
 
   '''
