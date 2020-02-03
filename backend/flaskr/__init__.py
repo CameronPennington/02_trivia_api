@@ -65,8 +65,8 @@ def create_app(test_config=None):
   def delete_question(question_id):
     try:
       
-      question = Question.query.filter(Question.id == question_id).one_or_none()
-      if question is None:
+      question = Question.query.get(question_id)
+      if not question:
         abort(404)
       question.delete()
 

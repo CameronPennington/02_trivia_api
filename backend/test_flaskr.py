@@ -67,13 +67,11 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().delete('/questions/1')
         data = json.loads(res.data)
 
-        question = Question.query.filter(Question.id == 1).one_or_none()
+        question = Question.query.get(1)
 
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(200, res.status_code)
+        self.assertEqual(question, None)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], 1)
-        self.assertTrue(data['total_questions'])
-        self.assertTrue(len(data['questions']))
 
     # def test_search_questions(self):
     #     res = self.client().post('/questions/search', json=self.search_term)
