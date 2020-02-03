@@ -109,6 +109,16 @@ DELETE '/questions/<int:question_id>'
       'questions': formatted_questions[start:end]
     }
 ```
+POST '/questions'
+- Takes user input and creates a new question in the database
+- Request Body: {question: String, answer: String, category: String, difficulty: Integer}
+- Returns a dictionary with the response status code and a boolean success message
+
+{
+      'success': True,
+      'status_code': 200
+    }
+```
 
 
 ## Testing
