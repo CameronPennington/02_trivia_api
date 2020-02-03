@@ -77,14 +77,39 @@ POST ...
 DELETE ...
 
 GET '/categories'
-- Fetches a list of categories in which the keys are the ids and the value is the corresponding string of the category
+- Fetches a list of categories
 - Request Arguments: None
 - Returns: An array of currently available categories:
     ['Science', 'Art', 'Geography', 'History', 'Entertainment', 'Sports']
 
 ```
 GET '/questions'/
-- Fetches a 
+- Fetches a dictionary with a list of questions with a maximum length to facilitate pagination, the total number of questions, and a list of categories
+- Request Arguments: None
+- Returns: A dictionary with the fetched information, a status code, and a boolean indicating success or failure of the operation:
+
+{
+        'success': True,
+        'status_code': 200,
+        'questions': formatted_questions[start:end],
+        'total_questions': len(formatted_questions),
+        'categories': category_items
+      }
+```
+DELETE '/questions/<int:question_id>'
+- Queries the database for a question with the given ID and deletes it
+- Request Arguments: The id of the question to be deleted
+- Returns: A dictionary with the response status code, boolean success message, the id of the deleted question, the new list of questions, and the new total number of questions:
+
+{
+      'success': True,
+      'status_code': 200,
+      'deleted': question_id,
+      'total_questions': len(formatted_questions),
+      'questions': formatted_questions[start:end]
+    }
+```
+
 
 ## Testing
 To run the tests, run
