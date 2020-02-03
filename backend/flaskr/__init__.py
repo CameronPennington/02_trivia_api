@@ -48,7 +48,6 @@ def create_app(test_config=None):
       questions = Question.query.order_by('id').all()
       formatted_questions = [question.format() for question in questions]
       categories = Category.query.order_by('id').all()
-      # category_items = [(category.type) for category in categories]
       formatted_categories = [category.format() for category in categories]
       if len(questions) == 0 or len(categories) == 0:
         abort(404)

@@ -136,7 +136,7 @@ class QuestionView extends Component {
         </div>
         <div className="questions-list">
           <h2>Questions</h2>
-          {this.state.questions.map((q, ind) => (
+          {this.state.questions.map((q) => (
             <Question
               key={q.id}
               question={q.question}

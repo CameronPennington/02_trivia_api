@@ -79,8 +79,8 @@ DELETE ...
 GET '/categories'
 - Fetches a list of categories
 - Request Arguments: None
-- Returns: An array of currently available categories:
-    ['Science', 'Art', 'Geography', 'History', 'Entertainment', 'Sports']
+- Returns: An array of currently available categories in a dictionary with their id:
+    [{ 'id': 1, 'type: 'Science'}, { 'id': 2, 'type': 'Art'}, { 'id': 3, 'type': 'Geography'}, { 'id': 4, 'type': 'History'}, { 'id': 5, 'type': 'Entertainment'}, { 'id': 6, 'type': 'Sports'}]
 
 ```
 GET '/questions'/
