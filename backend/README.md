@@ -119,6 +119,11 @@ POST '/questions'
       'status_code': 200
     }
 ```
+POST '/questions/search'
+- Takes user input and searches the database for questions that match the input
+- Request Body: { searchTerm: String}
+- Returns an array of questions matching the user inpute
+```
 
 
 ## Testing
