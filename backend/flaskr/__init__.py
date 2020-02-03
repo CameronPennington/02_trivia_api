@@ -197,6 +197,14 @@ def create_app(test_config=None):
       'error': 422,
       'message': 'Not processable'
     }), 422
+
+  @app.errorhandler(500)
+  def internal_error(e):
+    return jsonify({
+      'success': False,
+      'error': 500,
+      'message': 'Internal server error'
+    }), 500
   
   return app
 
