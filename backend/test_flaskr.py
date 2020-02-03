@@ -75,12 +75,12 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
         self.assertTrue(len(data['questions']))
 
-    def test_search_questions(self):
-        res = self.client().post('/questions/search', json=self.search_term)
-        data = json.loads(res.data)
+    # def test_search_questions(self):
+    #     res = self.client().post('/questions/search', json=self.search_term)
+    #     data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertEqual(data['success'], True)
 
 
     def test_create_question(self):

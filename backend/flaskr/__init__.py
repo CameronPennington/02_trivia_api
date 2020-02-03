@@ -134,6 +134,7 @@ def create_app(test_config=None):
     
       if len(questions) == 0:
         abort(404)
+
       formatted_questions = [question.format() for question in questions]
       page = 1
       start = (page - 1) * 10
