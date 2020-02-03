@@ -63,22 +63,16 @@ def create_app(test_config=None):
 
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def delete_question(question_id):
-    try:
-      
-      question = Question.query.get(question_id)
-      if not question:
-        abort(404)
-      question.delete()
 
-      db.session.commit()
-    except:
-      db.session.rollback()
-      abort(422)
-    finally:
-      db.session.close()
+    question = Question.query.get(question_id)
+    if not question:
+      abort(404)
+    question.delete()
+    db.session.commit()
 
     return jsonify({
-      'success': True
+      'success': True,
+      'message': 'Delete occured'
     }), 200
 
   @app.route('/questions', methods=['POST'])
@@ -117,31 +111,21 @@ def create_app(test_config=None):
   '''
   @app.route('/questions/search', methods=['POST'])
   def search_questions():
-    try:
-      req_data = request.get_json()
-      
-      questions = Question.query.filter(func.lower(Question.question).contains(req_data['searchTerm'].lower())).all()
     
-      if len(questions) == 0:
-        abort(404)
+    req_data = request.get_json()
+    term = req_data.get('searchTerm', None)
+    # questions = Question.query.filter(func.lower(Question.question).contains(req_data['searchTerm'].lower())).all()
+    questions = Question.query.filter(Question.question.ilike(f'%{term}%')).all()
 
-      formatted_questions = [question.format() for question in questions]
-      page = 1
-      start = (page - 1) * 10
-      end = start + 10
-      categories = Category.query.order_by('id').all()
-      category_items = [(category.type) for category in categories]
-
-    except:
-      abort(422)
+    formatted_questions = [question.format() for question in questions]
+    page = 1
+    start = (page - 1) * 10
+    end = start + 10
 
     return jsonify({
       'success': True,
-      'status_code': 200,
-      'questions': formatted_questions[start:end],
-      'total_questions': len(formatted_questions),
-      'categories': category_items
-    })
+      'questions': formatted_questions[start:end]
+    }), 200
 
   '''
   @TODO: 

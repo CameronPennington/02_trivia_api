@@ -64,10 +64,10 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
 
     def test_delete_question(self):
-        res = self.client().delete('/questions/1')
+        res = self.client().delete('/questions/2')
         data = json.loads(res.data)
 
-        question = Question.query.get(1)
+        question = Question.query.get(2)
 
         self.assertEqual(200, res.status_code)
         self.assertEqual(question, None)
