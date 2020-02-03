@@ -122,7 +122,12 @@ POST '/questions'
 POST '/questions/search'
 - Takes user input and searches the database for questions that match the input
 - Request Body: { searchTerm: String}
-- Returns an array of questions matching the user inpute
+- Returns an array of questions matching the user input
+```
+GET '/categories/<int:category_id>/questions
+- Fetches questions from the database that match the provided category id
+- Request Arguments: The id of the chosen category
+- Returns an array of questions that are of the chosen category
 ```
 
 
