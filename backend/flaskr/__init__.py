@@ -144,11 +144,16 @@ def create_app(test_config=None):
   '''
   @app.route('/quizzes', methods=['POST'])
   def play_quiz():
-    #add "all" option
+    
     req_data = request.get_json()
     category_id = req_data['quiz_category']
     previous_questions = req_data['previous_questions']
-    questions = Question.query.filter(Question.category.__eq__(category_id)).all()
+
+    if category_id == 0:
+      questions = Question.query.all()
+    else:
+      questions = Question.query.filter(Question.category.__eq__(category_id)).all()
+   
     formatted_questions = [question.format() for question in questions]
 
     #need to check against previous questions list
@@ -157,6 +162,7 @@ def create_app(test_config=None):
         formatted_questions.remove(question)
 
     selected_question = random.choice(formatted_questions)
+   
     return jsonify({
       'question': selected_question,
       'previousQuestions': previous_questions,
