@@ -148,7 +148,7 @@ def create_app(test_config=None):
     req_data = request.get_json()
     category_id = req_data['quiz_category']
     previous_questions = req_data['previous_questions']
-
+    print(previous_questions)
     if category_id == 0:
       questions = Question.query.all()
     else:
