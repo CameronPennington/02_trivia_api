@@ -63,16 +63,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions'])
         self.assertTrue(data['categories'])
 
-    #Delete test removes data from db, so the same test can't be run twice. Need to find a different pattern
-
-    # def test_delete_question(self):
-    #     res = self.client().delete('/questions/2')
-    #     data = json.loads(res.data)
-    #     question = Question.query.get(2)
-    #     self.assertEqual(200, res.status_code)
-    #     self.assertEqual(question, None)
-    #     self.assertEqual(data['success'], True)
-
+ 
     def test_search_questions(self):
         res = self.client().post('/questions/search', json=self.search_term)
         data = json.loads(res.data)
@@ -84,12 +75,28 @@ class TriviaTestCase(unittest.TestCase):
     def test_create_question(self):
         res = self.client().post('/questions', json=self.new_question)
         data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        
 
+    #Should be a way to test without harcoding an id
+
+    # def test_delete_question(self):
+    #     res = self.client().delete('/questions/2')
+    #     data = json.loads(res.data)
+    #     question = Question.query.get(2)
+    #     self.assertEqual(200, res.status_code)
+    #     self.assertEqual(question, None)
+    #     self.assertEqual(data['success'], True)
+
+    def test_get_questions_by_category(self):
+        res = self.client().get('/categories/1/questions')
+        data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-
-        
+        self.assertTrue(data['questions'])
+        self.assertTrue(data['total_questions'])
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

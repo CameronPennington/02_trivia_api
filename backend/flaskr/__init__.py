@@ -129,8 +129,9 @@ def create_app(test_config=None):
 
       return jsonify({
         'questions': formatted_questions[start:end],
-        'total_questions': len(formatted_questions)
-      })
+        'total_questions': len(formatted_questions),
+        'success': True
+      }), 200
 
   @app.route('/quizzes', methods=['POST'])
   def play_quiz():
