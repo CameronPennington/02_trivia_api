@@ -131,43 +131,42 @@ def create_app(test_config=None):
         'questions': formatted_questions[start:end],
         'total_questions': len(formatted_questions)
       })
-  '''
-  @TODO: 
-  Create a POST endpoint to get questions to play the quiz. 
-  This endpoint should take category and previous question parameters 
-  and return a random questions within the given category, 
-  if provided, and that is not one of the previous questions. 
 
-  TEST: In the "Play" tab, after a user selects "All" or a category,
-  one question at a time is displayed, the user is allowed to answer
-  and shown whether they were correct or not. 
-  '''
   @app.route('/quizzes', methods=['POST'])
   def play_quiz():
-    
-    req_data = request.get_json()
-    category_id = req_data['quiz_category']
-    previous_questions = req_data['previous_questions']
-    print(previous_questions)
-    if category_id == 0:
-      questions = Question.query.all()
-    else:
-      questions = Question.query.filter(Question.category.__eq__(category_id)).all()
-   
-    formatted_questions = [question.format() for question in questions]
+    try:
+      req_data = request.get_json()
 
-    #need to check against previous questions list
-    for question in formatted_questions:
-      if question['id'] in previous_questions:
-        formatted_questions.remove(question)
+      valid_categories = [0,1,2,3,4,5,6]
+      if 'quiz_category' not in req_data or 'previous_questions' not in req_data:
+        abort(400)
+      elif int(req_data.get('quiz_category')['id']) not in valid_categories:
+        abort(422)
 
-    selected_question = random.choice(formatted_questions)
-   
-    return jsonify({
-      'question': selected_question,
-      'previousQuestions': previous_questions,
-      'succes': True
-    }), 200
+      questions = [question.format() for question in 
+                  Question.query.filter(Question.id.notin_(
+                    req_data.get('previous_questions'))).all()]
+      
+      if req_data.get('quiz_category')['id'] != 0:
+        questions = [question.format() for question in
+                    Question.query.filter_by(category=req_data.get(
+                      'quiz_category')['id']).filter(
+                        Question.id.notin_(req_data.get(
+                          'previous_questions'))).all()]
+
+      if questions:
+        next_question = random.choice(questions)
+      else:
+        next_question = None
+
+      return jsonify({
+        'success': True,
+        'question': next_question
+      })
+    except Exception as error:
+      raise error
+    finally:
+      db.session.close()
 
 
 

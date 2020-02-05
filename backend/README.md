@@ -129,7 +129,10 @@ GET '/categories/<int:category_id>/questions
 - Request Arguments: The id of the chosen category
 - Returns an array of questions that are of the chosen category
 ```
-
+POST '/quizzes'
+- Takes user input and fetches the data necessary to play the game
+- Request Body: { 'quiz_category': String, 'previous_questions': List}
+- Returns a list of previous questions and a randomly selected question from the pool of questions limited by category, and de-duped against the previous questions.
 
 ## Testing
 To run the tests, run
