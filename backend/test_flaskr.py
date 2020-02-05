@@ -37,6 +37,11 @@ class TriviaTestCase(unittest.TestCase):
             'category_name': 'Test Category Name'
         }
 
+        self.quiz_options = {
+            'quiz_category': { 'id': 1, 'type': 'Science'},
+            'previous_questions': []
+        }
+
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -97,6 +102,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['questions'])
         self.assertTrue(data['total_questions'])
+
+    def test_get_quiz(self):
+        res = self.client().post('/quizzes', json=self.quiz_options)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['question'])
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

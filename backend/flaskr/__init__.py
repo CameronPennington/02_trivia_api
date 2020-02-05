@@ -162,8 +162,9 @@ def create_app(test_config=None):
 
       return jsonify({
         'success': True,
-        'question': next_question
-      })
+        'question': next_question,
+      }), 200
+
     except Exception as error:
       raise error
     finally:
