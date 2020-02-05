@@ -131,8 +131,9 @@ GET '/categories/<int:category_id>/questions
 ```
 POST '/quizzes'
 - Takes user input and fetches the data necessary to play the game
-- Request Body: { 'quiz_category': String, 'previous_questions': List}
-- Returns a list of previous questions and a randomly selected question from the pool of questions limited by category, and de-duped against the previous questions.
+- Request Body: { 'quiz_category': { 'id': Integer, 'type': String}, 'previous_questions': List}
+- Returns a randomly selected question from the pool of questions limited by category, and de-duped against the previous questions.
+```
 
 ## Testing
 To run the tests, run
