@@ -44,7 +44,7 @@ def create_app(test_config=None):
 
   @app.route('/questions', methods=['GET'])
   def get_questions():
-    if request.method != 'GET' or 'POST':
+    if request.method != 'GET' and request.method != 'POST':
       abort(405)
 
     try:
@@ -84,7 +84,7 @@ def create_app(test_config=None):
 
   @app.route('/questions', methods=['POST'])
   def create_new_question():
-    if request.method != 'GET' or 'POST':
+    if request.method != 'GET' and request.method != 'POST':
       abort(405)
 
     try:
