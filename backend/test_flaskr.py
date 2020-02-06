@@ -42,6 +42,14 @@ class TriviaTestCase(unittest.TestCase):
             'previous_questions': []
         }
 
+        self.bad_request_new_question = {
+            'kwestion': 'Test Question',
+            'answer': 'Test Answer',
+            'difficulty': 1,
+            'category': 1,
+            'category_name': 'Test Category Name'
+        }
+
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -126,6 +134,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 405)       
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Not allowed')
+
+    def test_422_not_processable(self):
+        res = self.client().post('/questions', json=self.bad_request_new_question)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)       
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Not processable')
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
