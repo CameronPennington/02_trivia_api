@@ -119,6 +119,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Not found')
 
+    def test_405_not_allowed(self):
+        res = self.client().get('/questions/1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 405)       
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Not allowed')
+
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()
