@@ -25,6 +25,9 @@ def create_app(test_config=None):
   @app.route('/categories', methods=['GET'])
   def get_categories():
     try:
+      if request.method != 'GET':
+        abort(405)
+
       categories = Category.query.order_by('id').all()
       formatted_categories = [category.format() for category in categories]
 
@@ -41,6 +44,9 @@ def create_app(test_config=None):
 
   @app.route('/questions', methods=['GET'])
   def get_questions():
+    if request.method != 'GET' or 'POST':
+      abort(405)
+
     try:
       page = request.args.get('page', 1, type=int)
       start = (page - 1) * 10
@@ -63,7 +69,8 @@ def create_app(test_config=None):
 
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def delete_question(question_id):
-
+    if request.method != 'DELETE':
+      abort(405)
     question = Question.query.get(question_id)
     if not question:
       abort(404)
@@ -77,6 +84,9 @@ def create_app(test_config=None):
 
   @app.route('/questions', methods=['POST'])
   def create_new_question():
+    if request.method != 'GET' or 'POST':
+      abort(405)
+
     try:
       req_data = request.get_json()
    
@@ -102,7 +112,9 @@ def create_app(test_config=None):
  
   @app.route('/questions/search', methods=['POST'])
   def search_questions():
-    
+    if request.method != 'POST':
+      abort(405)
+
     req_data = request.get_json()
     term = req_data.get('searchTerm', None)
     
@@ -120,6 +132,8 @@ def create_app(test_config=None):
 
   @app.route('/categories/<int:category_id>/questions', methods=['GET'])
   def questions_by_category(category_id):
+      if request.method != 'GET':
+        abort(405)
             
       questions = Question.query.filter(Question.category.__eq__(category_id)).all()
       formatted_questions = [question.format() for question in questions]
@@ -135,6 +149,9 @@ def create_app(test_config=None):
 
   @app.route('/quizzes', methods=['POST'])
   def play_quiz():
+    if request.method != 'POST':
+      abort(405)
+
     try:
       req_data = request.get_json()
 
@@ -177,7 +194,6 @@ def create_app(test_config=None):
   def not_found(e):
     return jsonify({
       'success': False,
-      'error': 404,
       'message': 'Not found'
     }), 404
 
@@ -185,7 +201,6 @@ def create_app(test_config=None):
   def not_allowed(e):
     return jsonify({
       'success': False,
-      'error': 405,
       'message': 'Not allowed'
     }), 405
 
@@ -193,7 +208,6 @@ def create_app(test_config=None):
   def not_processable(e):
     return jsonify({
       'success': False,
-      'error': 422,
       'message': 'Not processable'
     }), 422
 
@@ -201,7 +215,6 @@ def create_app(test_config=None):
   def internal_error(e):
     return jsonify({
       'success': False,
-      'error': 500,
       'message': 'Internal server error'
     }), 500
   

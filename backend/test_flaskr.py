@@ -86,13 +86,13 @@ class TriviaTestCase(unittest.TestCase):
 
     #Should be a way to test without harcoding an id
 
-    def test_delete_question(self):
-        res = self.client().delete('/questions/2')
-        data = json.loads(res.data)
-        question = Question.query.get(2)
-        self.assertEqual(200, res.status_code)
-        self.assertEqual(question, None)
-        self.assertEqual(data['success'], True)
+    # def test_delete_question(self):
+    #     res = self.client().delete('/questions/2')
+    #     data = json.loads(res.data)
+    #     question = Question.query.get(2)
+    #     self.assertEqual(200, res.status_code)
+    #     self.assertEqual(question, None)
+    #     self.assertEqual(data['success'], True)
 
     def test_get_questions_by_category(self):
         res = self.client().get('/categories/1/questions')
@@ -110,6 +110,14 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['question'])
+
+    def test_404_not_found(self):
+        res = self.client().delete('/categories/9999')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)       
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Not found')
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
