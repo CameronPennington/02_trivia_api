@@ -54,7 +54,7 @@ def create_app(test_config=None):
       return jsonify({
         'success': True,
         'status_code': 200,
-        'questions': formatted_questions,
+        'questions': formatted_questions[start:end],
         'total_questions': len(formatted_questions),
         'categories': formatted_categories
       })
